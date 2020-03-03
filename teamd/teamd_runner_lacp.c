@@ -1103,11 +1103,16 @@ static int lacpdu_recv(struct lacp_port *lacp_port)
 	struct lacpdu lacpdu;
 	struct sockaddr_ll ll_from;
 	int err;
+	bool admin_state;
 
 	err = teamd_recvfrom(lacp_port->sock, &lacpdu, sizeof(lacpdu), 0,
 			     (struct sockaddr *) &ll_from, sizeof(ll_from));
 	if (err <= 0)
 		return err;
+
+	admin_state = team_get_ifinfo_admin_state(lacp_port->ctx->ifinfo);
+	if (!admin_state)
+		return 0;
 
 	if (!teamd_port_present(lacp_port->ctx, lacp_port->tdport))
 		return 0;
