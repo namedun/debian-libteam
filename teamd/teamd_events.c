@@ -34,6 +34,19 @@ struct event_watch_item {
 	void *priv;
 };
 
+void teamd_refresh_ports(struct teamd_context *ctx)
+{
+	struct teamd_port *tdport;
+	struct event_watch_item *watch;
+
+	teamd_for_each_tdport(tdport, ctx) {
+		list_for_each_node_entry(watch, &ctx->event_watch_list, list) {
+			if (!watch->ops->refresh) continue;
+			watch->ops->refresh(ctx, tdport, watch->priv);
+		}
+	}
+}
+
 int teamd_event_port_added(struct teamd_context *ctx,
 			   struct teamd_port *tdport)
 {

@@ -1421,6 +1421,16 @@ static int lacp_event_watch_port_changed(struct teamd_context *ctx,
 	return lacp_port_link_update(lacp_port);
 }
 
+static void lacp_event_watch_refresh(struct teamd_context *ctx,
+					 struct teamd_port *tdport, void *priv)
+{
+	struct lacp *lacp = priv;
+	struct lacp_port *lacp_port = lacp_port_get(lacp, tdport);
+
+	if (lacp_port_selected(lacp_port))
+		(void) lacpdu_send(lacp_port);
+}
+
 static const struct teamd_event_watch_ops lacp_event_watch_ops = {
 	.hwaddr_changed = lacp_event_watch_hwaddr_changed,
 	.port_hwaddr_changed = lacp_event_watch_port_hwaddr_changed,
@@ -1428,6 +1438,7 @@ static const struct teamd_event_watch_ops lacp_event_watch_ops = {
 	.port_removed = lacp_event_watch_port_removed,
 	.port_changed = lacp_event_watch_port_changed,
 	.admin_state_changed = lacp_event_watch_admin_state_changed,
+	.refresh = lacp_event_watch_refresh,
 };
 
 static int lacp_carrier_init(struct teamd_context *ctx, struct lacp *lacp)

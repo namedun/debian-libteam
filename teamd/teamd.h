@@ -193,11 +193,14 @@ struct teamd_event_watch_ops {
 	int (*port_master_ifindex_changed)(struct teamd_context *ctx,
 					   struct teamd_port *tdport,
 					   void *priv);
+	void (*refresh)(struct teamd_context *ctx,
+                   struct teamd_port *tdport, void *priv);
 	int (*option_changed)(struct teamd_context *ctx,
 			      struct team_option *option, void *priv);
 	char *option_changed_match_name;
 };
 
+void teamd_refresh_ports(struct teamd_context *ctx);
 int teamd_event_port_added(struct teamd_context *ctx,
 			   struct teamd_port *tdport);
 void teamd_event_port_removed(struct teamd_context *ctx,
