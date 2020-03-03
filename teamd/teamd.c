@@ -285,6 +285,10 @@ static int handle_period_fd(int fd)
 		teamd_log_err("read() failed.");
 		return -errno;
 	}
+	if (ret == 0) {
+		teamd_log_warn("read() for timer_fd returned 0.");
+		return 1;
+	}
 	if (ret != sizeof(uint64_t)) {
 		teamd_log_err("read() returned unexpected number of bytes.");
 		return -EINVAL;
@@ -345,7 +349,9 @@ static int teamd_run_loop_do_callbacks(struct list_item *lcb_list, fd_set *fds,
 				continue;
 			if (lcb->is_period) {
 				err = handle_period_fd(lcb->fd);
-				if (err)
+				if (err == 1)
+					continue; /* timerfd returned 0. Don't do anything */
+				if (err < 0)
 					return err;
 			}
 			err = lcb->func(ctx, events, lcb->priv);
