@@ -551,9 +551,9 @@ int team_destroy(struct team_handle *th)
 /* \endcond */
 
 /* libnl uses default 32k socket receive buffer size,
- * which can get too small. Use 192k for all sockets.
+ * which can get too small. Use 960k for all sockets.
  */
-#define NETLINK_RCVBUF 196608
+#define NETLINK_RCVBUF 983040
 
 /**
  * @param th		libteam library context
