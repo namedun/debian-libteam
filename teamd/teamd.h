@@ -126,6 +126,9 @@ struct teamd_context {
 	char *				hwaddr;
 	uint32_t			hwaddr_len;
 	bool				hwaddr_explicit;
+	bool				warm_start_mode;
+	bool				keep_ports;
+	char *				lacp_directory;
 	struct {
 		struct list_item		callback_list;
 		int				ctrl_pipe_r;
@@ -195,12 +198,15 @@ struct teamd_event_watch_ops {
 					   void *priv);
 	void (*refresh)(struct teamd_context *ctx,
                    struct teamd_port *tdport, void *priv);
+	void (*port_flush_data)(struct teamd_context *ctx,
+                   struct teamd_port *tdport, void *priv);
 	int (*option_changed)(struct teamd_context *ctx,
 			      struct team_option *option, void *priv);
 	char *option_changed_match_name;
 };
 
 void teamd_refresh_ports(struct teamd_context *ctx);
+void teamd_ports_flush_data(struct teamd_context *ctx);
 int teamd_event_port_added(struct teamd_context *ctx,
 			   struct teamd_port *tdport);
 void teamd_event_port_removed(struct teamd_context *ctx,

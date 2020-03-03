@@ -117,7 +117,9 @@ static void print_help(const struct teamd_context *ctx) {
             "    -D --dbus-enable         Enable D-Bus interface\n"
             "    -Z --zmq-enable=ADDRESS  Enable ZeroMQ interface\n"
             "    -U --usock-enable        Enable UNIX domain socket interface\n"
-            "    -u --usock-disable       Disable UNIX domain socket interface\n",
+            "    -u --usock-disable       Disable UNIX domain socket interface\n"
+            "    -w --warm-start          Warm-start startup mode\n"
+            "    -L --lacp-directory      Directory for saving lacp pdu dumps\n",
             ctx->argv0);
 	printf("Available runners: ");
 	for (i = 0; i < TEAMD_RUNNER_LIST_SIZE; i++) {
@@ -151,10 +153,12 @@ static int parse_command_line(struct teamd_context *ctx,
 		{ "zmq-enable",		required_argument,	NULL, 'Z' },
 		{ "usock-enable",	no_argument,		NULL, 'U' },
 		{ "usock-disable",	no_argument,		NULL, 'u' },
+		{ "warm-start",         no_argument,		NULL, 'w' },
+		{ "lacp-directory",     required_argument,	NULL, 'L' },
 		{ NULL, 0, NULL, 0 }
 	};
 
-	while ((opt = getopt_long(argc, argv, "hdkevf:c:p:gl:roNt:nDZ:Uu",
+	while ((opt = getopt_long(argc, argv, "hdkevf:c:p:gl:roNt:nDZ:UuwL:",
 				  long_options, NULL)) >= 0) {
 
 		switch(opt) {
@@ -236,9 +240,25 @@ static int parse_command_line(struct teamd_context *ctx,
 		case 'u':
 			ctx->usock.enabled = false;
 			break;
+		case 'w':
+			ctx->warm_start_mode = true;
+			break;
+		case 'L':
+			ctx->lacp_directory = strdup(optarg);
+			if (access(ctx->lacp_directory, R_OK | W_OK | X_OK) != 0) {
+				fprintf(stderr, "Can't write to the lacp directory '%s': %s\n", ctx->lacp_directory, strerror(errno));
+				free(ctx->lacp_directory);
+				ctx->lacp_directory = NULL;
+			}
+			break;
 		default:
 			return -1;
 		}
+	}
+
+	if (ctx->warm_start_mode && !ctx->lacp_directory) {
+		fprintf(stderr, "Can't enable warm-start mode without lacp-directory specified\n");
+		ctx->warm_start_mode = false;
 	}
 
 	if (optind < argc) {
@@ -390,9 +410,18 @@ static int teamd_run_loop_run(struct teamd_context *ctx)
 			if (err != -1) {
 				switch(ctrl_byte) {
 				case 'q':
+				case 'f':
+				case 'w':
 					if (quit_in_progress)
 						return -EBUSY;
-					teamd_refresh_ports(ctx);
+					if (ctrl_byte == 'w' || ctrl_byte == 'f') {
+						ctx->keep_ports = true;
+						ctx->no_quit_destroy = true;
+						teamd_refresh_ports(ctx);
+						if (ctrl_byte == 'w')
+							teamd_ports_flush_data(ctx);
+					}
+
 					err = teamd_flush_ports(ctx);
 					if (err)
 						return err;
@@ -432,6 +461,12 @@ void teamd_run_loop_quit(struct teamd_context *ctx, int err)
 {
 	ctx->run_loop.err = err;
 	teamd_run_loop_sent_ctrl_byte(ctx, 'q');
+}
+
+static void teamd_run_loop_quit_a_boot(struct teamd_context *ctx, char type, int err)
+{
+	ctx->run_loop.err = err;
+	teamd_run_loop_sent_ctrl_byte(ctx, type);
 }
 
 void teamd_run_loop_restart(struct teamd_context *ctx)
@@ -699,6 +734,14 @@ static int callback_daemon_signal(struct teamd_context *ctx, int events,
 	case SIGTERM:
 		teamd_log_warn("Got SIGINT, SIGQUIT or SIGTERM.");
 		teamd_run_loop_quit(ctx, 0);
+		break;
+	case SIGUSR1:
+		teamd_log_warn("Got SIGUSR1.");
+		teamd_run_loop_quit_a_boot(ctx, 'w', 0);
+		break;
+	case SIGUSR2:
+		teamd_log_warn("Got SIGUSR2.");
+		teamd_run_loop_quit_a_boot(ctx, 'f', 0);
 		break;
 	}
 	return 0;
@@ -1533,7 +1576,7 @@ static int teamd_start(struct teamd_context *ctx, enum teamd_exit_code *p_ret)
 		return -errno;
 	}
 
-	if (daemon_signal_init(SIGINT, SIGTERM, SIGQUIT, SIGHUP, 0) < 0) {
+	if (daemon_signal_init(SIGINT, SIGTERM, SIGQUIT, SIGHUP, SIGUSR1, SIGUSR2, 0) < 0) {
 		teamd_log_err("Could not register signal handlers.");
 		daemon_retval_send(errno);
 		err = -errno;

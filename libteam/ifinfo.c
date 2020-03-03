@@ -109,15 +109,13 @@ static void update_hwaddr(struct team_ifinfo *ifinfo, struct rtnl_link *link)
 	hwaddr_len = nl_addr_get_len(nl_addr);
 	if (ifinfo->hwaddr_len != hwaddr_len) {
 		ifinfo->hwaddr_len = hwaddr_len;
-		if (!ifinfo->master_ifindex)
-			ifinfo->orig_hwaddr_len = hwaddr_len;
+		ifinfo->orig_hwaddr_len = hwaddr_len;
 		set_changed(ifinfo, CHANGED_HWADDR_LEN);
 	}
 	hwaddr = nl_addr_get_binary_addr(nl_addr);
 	if (memcmp(ifinfo->hwaddr, hwaddr, hwaddr_len)) {
 		memcpy(ifinfo->hwaddr, hwaddr, hwaddr_len);
-		if (!ifinfo->master_ifindex)
-			memcpy(ifinfo->orig_hwaddr, hwaddr, hwaddr_len);
+		memcpy(ifinfo->orig_hwaddr, hwaddr, hwaddr_len);
 		set_changed(ifinfo, CHANGED_HWADDR);
 	}
 }
