@@ -163,7 +163,7 @@ static int cli_usock_method_call(struct teamdctl *tdc, const char *method_name,
 	char *replystr;
 	int err;
 
-	dbg(tdc, "usock: Calling method \"%s\"", method_name);
+	/* dbg(tdc, "usock: Calling method \"%s\"", method_name); */
 	err= myasprintf(&msg, "%s\n%s\n", TEAMD_USOCK_REQUEST_PREFIX,
 					  method_name);
 	if (err)
