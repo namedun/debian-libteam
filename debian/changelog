@@ -1,0 +1,119 @@
+libteam (1.30-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Standards-Version: 4.4.1.
+  * Re-named: "debian/TODO.Debian" --> "debian/TODO".
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Mon, 13 Jan 2020 12:55:39 +1100
+
+libteam (1.29-1) unstable; urgency=medium
+
+  * New upstream release (Closes: #934610).
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Fri, 15 Nov 2019 20:55:40 +1100
+
+libteam (1.28-1) unstable; urgency=medium
+
+  [ Ondřej Nový ]
+  * d/copyright: Change Format URL to correct one
+
+  [ Dmitry Smirnov ]
+  * New upstream release (Closes: #919675).
+  * Standards-Version: 4.3.0.
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Sun, 27 Jan 2019 20:16:14 +1100
+
+libteam (1.27-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Vcs URLs to Salsa.
+  * Standards-Version: 4.1.5.
+  * debhelper & compat to version 11.
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Fri, 27 Jul 2018 03:00:18 +1000
+
+libteam (1.26-1) unstable; urgency=medium
+
+  * New upstream release [August 2016].
+  * Install D-Bus rules "teamd.conf" (Closes: #833645).
+    Thanks, Charles Malaheenee.
+  * Provides += "teamd".
+  * Corrected Vcs-Git URL.
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Sat, 27 Aug 2016 22:18:43 +1000
+
+libteam (1.24-1) unstable; urgency=medium
+
+  * New upstream release [April 2016].
+  * Standards-Version: 3.9.8.
+  * symbols: added "Build-Depends-Package" field.
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Mon, 25 Apr 2016 15:37:12 +1000
+
+libteam (1.23-1) unstable; urgency=medium
+
+  * New upstream release [December 2015] (Closes: #813669).
+  * Updated Vcs URLs.
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Thu, 04 Feb 2016 20:12:19 +1100
+
+libteam (1.18-1) unstable; urgency=low
+
+  * New upstream release [August 2015].
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Mon, 24 Aug 2015 07:16:46 +1000
+
+libteam (1.17-1) unstable; urgency=low
+
+  * New upstream release [April 2015].
+  * Standards-Version: 3.9.6.
+  * Lintianisation: pre-depends-directly-on-multiarch-support.
+  * Improved long package description (Closes: #760900);
+    Thanks, Filipus Klutiero.
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Sun, 26 Apr 2015 20:37:38 +1000
+
+libteam (1.12-2) unstable; urgency=medium
+
+  * "libteam-dev" to Depend on "libnl-3-dev" (Closes: #780855).
+    Thanks, Marco d'Itri.
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Wed, 25 Mar 2015 14:34:00 +1100
+
+libteam (1.12-1) unstable; urgency=low
+
+  * New upstream release [August 2014].
+  * Minor "debian/control" cleanup: "git" removed from Build-Depends.
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Sun, 31 Aug 2014 11:22:48 +1000
+
+libteam (1.11-1) unstable; urgency=low
+
+  * New upstream release [June 2014].
+  * Upload to unstable.
+  * Added "debian/gbp.conf".
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Sat, 05 Jul 2014 21:22:34 +1000
+
+libteam (1.10-1) experimental; urgency=low
+
+  * New upstream release [April 2014].
+  * TODO.Debian: added note to install init scripts.
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Sat, 05 Apr 2014 02:37:27 +1100
+
+libteam (1.9-1) experimental; urgency=low
+
+  * New upstream release [November 2013].
+    - dropped all patches (applied-upstream).
+  * "debian/rules": don't try to extract/check ABI/Soname numbers.
+  * Standards to 3.9.5
+  * Updated Homepage URL.
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Thu, 05 Dec 2013 02:42:38 +1100
+
+libteam (1.8-1) experimental; urgency=low
+
+  * Initial release (Closes: #695850).
+
+ -- Dmitry Smirnov <onlyjob@debian.org>  Sat, 12 Oct 2013 15:50:27 +1100

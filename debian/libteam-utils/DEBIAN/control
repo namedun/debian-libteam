@@ -1,0 +1,26 @@
+Package: libteam-utils
+Source: libteam
+Version: 1.30-1
+Architecture: amd64
+Maintainer: Dmitry Smirnov <onlyjob@debian.org>
+Installed-Size: 299
+Depends: libc6 (>= 2.15), libdaemon0 (>= 0.14), libdbus-1-3 (>= 1.9.14), libjansson4 (>= 2.3), libteam5 (>= 1.23), libteamdctl0 (>= 1.9), libzmq5 (>= 3.2.3+dfsg)
+Provides: teamd
+Section: net
+Priority: optional
+Homepage: http://libteam.org
+Description: library for controlling team network device -- userspace utilities
+ Libteam provides a mechanism to team multiple NICs (ports) at OSI Layer 2
+ (Data link) into a single virtual NIC. The process is called "channel
+ bonding", "Ethernet bonding", "channel teaming", "link aggregation", etc.
+ This is already implemented in the Linux kernel by the bonding driver but
+ unlike the bonding driver, libteam (user space) has the following
+ additional features:
+  * load-balancing for LACP support
+  * NS/NA (IPV6) link monitoring
+  * port priorities and stickiness ("primary" option enhancement)
+  * separate per-port link monitoring setup
+ .
+ Libteam requires Linux kernel 3.3 or higher.
+ .
+ This package provies user-space counterpart for team network driver.

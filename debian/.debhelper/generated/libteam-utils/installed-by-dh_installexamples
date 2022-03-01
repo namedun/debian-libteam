@@ -1,0 +1,16 @@
+./teamd/example_configs/activebackup_arp_ping_1.conf
+./teamd/example_configs/activebackup_arp_ping_2.conf
+./teamd/example_configs/activebackup_ethtool_1.conf
+./teamd/example_configs/activebackup_ethtool_2.conf
+./teamd/example_configs/activebackup_ethtool_3.conf
+./teamd/example_configs/activebackup_multi_lw_1.conf
+./teamd/example_configs/activebackup_nsna_ping_1.conf
+./teamd/example_configs/activebackup_tipc.conf
+./teamd/example_configs/broadcast.conf
+./teamd/example_configs/lacp_1.conf
+./teamd/example_configs/loadbalance_1.conf
+./teamd/example_configs/loadbalance_2.conf
+./teamd/example_configs/loadbalance_3.conf
+./teamd/example_configs/random.conf
+./teamd/example_configs/roundrobin.conf
+./teamd/example_configs/roundrobin_2.conf

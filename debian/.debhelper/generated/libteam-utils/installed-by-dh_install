@@ -1,0 +1,2 @@
+debian/tmp/usr/bin
+./teamd/dbus/teamd.conf

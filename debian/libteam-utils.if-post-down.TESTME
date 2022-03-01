@@ -1,0 +1,28 @@
+#!/bin/sh
+
+detach_slaves() {
+	for slave in $TEAM_SLAVES ; do
+		teamdctl $TEAM_MASTER port present $slave 2> /dev/null && \
+			teamdctl $TEAM_MASTER port remove $slave
+	done
+}
+
+kill_iface() {
+	ip link del $TEAM_MASTER
+}
+
+if [ "$IF_TEAM_MASTER" ] ; then
+	TEAM_MASTER="$IF_TEAM_MASTER"
+	TEAM_SLAVES="$IFACE"
+else
+	if [ "$IF_TEAM_SLAVES" ] ; then
+		TEAM_MASTER="$IFACE"
+		TEAM_SLAVES="$IF_TEAM_SLAVES"
+	fi
+fi
+
+[ -z "$TEAM_MASTER$TEAM_SLAVES" ] && exit
+
+detach_slaves
+kill_iface
+exit 0

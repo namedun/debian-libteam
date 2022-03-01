@@ -1,0 +1,8 @@
+libteam-dev_1.30-1_amd64.deb libdevel optional
+libteam-utils-dbgsym_1.30-1_amd64.deb debug optional automatic=yes
+libteam-utils_1.30-1_amd64.deb net optional
+libteam5-dbgsym_1.30-1_amd64.deb debug optional automatic=yes
+libteam5_1.30-1_amd64.deb net optional
+libteam_1.30-1_amd64.buildinfo net optional
+libteamdctl0-dbgsym_1.30-1_amd64.deb debug optional automatic=yes
+libteamdctl0_1.30-1_amd64.deb net optional

@@ -1,0 +1,73 @@
+ Following table compares Bonding vs. Team features:
+    https://fedorahosted.org/libteam/wiki/CompareToBonding
+
+[Feature]							[Bonding]	[Team]
+ broadcast TX policy						 Yes		 Yes
+ round-robin TX policy						 Yes		 Yes
+ active-backup TX policy					 Yes 		 Yes
+ LACP (802.3ad) support						 Yes 		 Yes
+ Hash-based TX policy						 Yes 		 Yes
+ User can set hash function					 No 		 Yes
+ TX load-balancing support (TLB)				 Yes 		 Yes
+ RX load-balancing support (ALB)				 Yes 		 Yes (Wip)
+ LACP hash port select						 Yes 		 Yes
+ load-balancing for LACP support				 No 		 Yes
+ Ethtool link monitoring					 Yes 		 Yes
+ ARP link monitoring						 Yes 		 Yes
+ NS/NA (IPV6) link monitoring					 No 		 Yes
+ ports up/down delays						 Yes 		 Yes
+ port priorities and stickiness ("primary" option enhancement)	 No		 Yes
+ separate per-port link monitoring setup			 No		 Yes
+ multiple link monitoring setup					 Limited	 Yes
+ lockless TX/RX path						 No (rwlock)	 Yes (RCU)
+ VLAN support							 Yes		 Yes
+ user-space runtime control					 Limited	 Full
+ Logic in user-space						 No		 Yes
+ Extensibility							 Hard		 Easy
+ Modular design							 No		 Yes
+ Performance overhead						 Low		 Very Low
+ D-Bus interface						 No		 Yes
+
+---
+
+## Bonding driver
+
+ *  Introduced in 2000
+ *  Huge and messy, therefore buggy
+ *  All logic is in kernel (monolith)
+ *  Does what it should not do (ARP link validation, 802.3ad, ...)
+ *  Too many config interfaces
+ *  12200 lines
+ *  Not fixable due to backward compatibility concerns
+
+---
+
+## Team device overview
+
+ *  Team is coming with modular approach
+ *  User-space based controlling
+ *  Minimum of the code is in kernel
+    * "Puppet"
+ *  Control logic is implemented in user-space daemon
+    * "Puppeteer"
+ *  Enslaved network interfaces are called "ports"
+
+ *  Only necessary fast-path code. (1400 lines)
+ *  Netlink communication (generic Netlink). (600 lines)
+ *  Team "modes"
+    * One mode, one kernel module
+    * Determine basic low-level behaviour
+    * Well defined API between team core and mode code
+    * round-robin, active-backup, ... easy to add more
+
+### Advantages comparing to bonding
+
+ *  Extensibility. Anyone can easily add features/change behaviour
+ *  Better system stability (daemon crash is always better than
+    kernel panic/memory corruption etc.)
+ *  Better debugging possibilities.
+
+The goal of team device is to supersede bonding functionality
+and then kill it eventually.
+
+

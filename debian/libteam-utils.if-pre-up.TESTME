@@ -1,0 +1,39 @@
+#!/bin/sh
+
+config_append() {
+	cat | jq -r ". * $1"
+}
+
+add_master() {
+	local config
+	config='{}'
+
+	[ -z "$IF_TEAM_MODE" ] || config=$(echo $config | config_append "{\"runner\": {\"name\": \"${IF_TEAM_MODE}\"}}")
+	[ -z "$IF_TEAM_NOTIFY" ] || config=$(echo $config | config_append "{\"notify_peers\": {\"count\": ${IF_TEAM_NOTIFY}}}")
+	[ -z "$IF_TEAM_NOTIFY_INTERVAL" ] || config=$(echo $config | config_append "{\"notify_peers\": {\"interval\": ${IF_TEAM_NOTIFY_INTERVAL}}}")
+
+	ip link show dev $TEAM_MASTER 2>/dev/null || teamd --daemonize --team-dev "${TEAM_MASTER}" --pid-file "/var/run/teamd.${TEAM_MASTER}.pid" --config "${config}"
+}
+
+enslave_slaves() {
+	for slave in $TEAM_SLAVES ; do
+		teamdctl $TEAM_MASTER port present $slave 2> /dev/null || \
+			teamdctl $TEAM_MASTER port add $slave
+	done
+}
+
+if [ "$IF_TEAM_MASTER" ] ; then
+	TEAM_MASTER="$IF_TEAM_MASTER"
+	TEAM_SLAVES="$IFACE"
+else
+	if [ "$IF_TEAM_SLAVES" ] ; then
+		TEAM_MASTER="$IFACE"
+		TEAM_SLAVES="$IF_TEAM_SLAVES"
+	fi
+fi
+
+[ -z "$TEAM_MASTER$TEAM_SLAVES" ] && exit
+
+add_master
+enslave_slaves
+exit 0

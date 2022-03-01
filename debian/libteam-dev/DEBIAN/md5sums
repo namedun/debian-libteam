@@ -1,0 +1,6 @@
+da90353b6e7de4435b1f3dd4ce54796f  usr/include/team.h
+402d2a7c38b5594b0fe9c55b508cd35d  usr/include/teamdctl.h
+aaca64e74a037cf768611183f6610ca3  usr/lib/x86_64-linux-gnu/pkgconfig/libteam.pc
+4390a948d6258fe7ff2a59e8e75466f5  usr/lib/x86_64-linux-gnu/pkgconfig/libteamdctl.pc
+f93f74031a50b9ff16ac4b1a5d576f15  usr/share/doc/libteam-dev/changelog.Debian.gz
+4e5c30874fbb0b534b16e6110b1de43b  usr/share/doc/libteam-dev/copyright

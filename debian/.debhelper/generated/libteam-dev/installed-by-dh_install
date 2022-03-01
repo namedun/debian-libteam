@@ -1,0 +1,6 @@
+debian/tmp/usr/include/team.h
+debian/tmp/usr/include/teamdctl.h
+debian/tmp/usr/lib/x86_64-linux-gnu/libteam.so
+debian/tmp/usr/lib/x86_64-linux-gnu/libteamdctl.so
+debian/tmp/usr/lib/x86_64-linux-gnu/pkgconfig/libteam.pc
+debian/tmp/usr/lib/x86_64-linux-gnu/pkgconfig/libteamdctl.pc
